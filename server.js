@@ -76,6 +76,7 @@ io.on("connection", (socket) => {
                 `room-${waitingUser.id}-${socket.id}`;
 
 
+            // 雙方加入同一個聊天室
             waitingUser.join(room);
             socket.join(room);
 
@@ -100,10 +101,12 @@ io.on("connection", (socket) => {
             );
 
 
+            // 配對完成，清空等待者
             waitingUser = null;
 
         } else {
 
+            // 沒有人等待
             waitingUser = socket;
 
             socket.emit("waiting");
@@ -156,10 +159,12 @@ io.on("connection", (socket) => {
 
             if (room !== socket.id) {
 
+                // 通知另一方
                 socket
                     .to(room)
                     .emit("strangerLeft");
 
+                // 自己離開房間
                 socket.leave(room);
 
             }
@@ -181,6 +186,7 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
 
+        // 如果這個人還在等待配對
         if (
             waitingUser &&
             waitingUser.id === socket.id
@@ -200,6 +206,10 @@ io.on("connection", (socket) => {
 
 });
 
+
+// =========================
+// 啟動伺服器
+// =========================
 
 const PORT = process.env.PORT || 3000;
 
