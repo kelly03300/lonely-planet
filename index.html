@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>寂寞星球</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- 首頁 -->
+    <div class="container" id="home">
+        <h1>🌌 寂寞星球</h1>
+
+        <p>每個人都有一些，想找人說說的話。</p>
+
+        <button id="startChat">🌙 找個人聊聊</button>
+    </div>
+
+
+    <!-- 聊天室 -->
+    <div class="chat-page" id="chatPage">
+
+        <div class="chat-header">
+            <div>
+                <h2>🌙 寂寞星球</h2>
+                <span>你正在和一位陌生人聊天</span>
+            </div>
+
+            <button class="leave-btn" id="leaveChat">離開</button>
+        </div>
+
+
+        <div class="messages" id="messages">
+
+            <div class="message other">
+                <span class="name">陌生人</span>
+                <div class="bubble">
+                    嗨，你今天過得還好嗎？
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="chat-input">
+
+            <input
+                type="text"
+                id="messageInput"
+                placeholder="想說什麼，都可以慢慢說..."
+                autocomplete="off"
+            >
+
+            <button id="sendMessage">送出</button>
+
+        </div>
+
+    </div>
+
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="script.js"></script>
+</html>

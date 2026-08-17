@@ -1,0 +1,208 @@
+body {
+    margin: 0;
+    background: #080b24;
+    color: white;
+    font-family: Arial, sans-serif;
+}
+
+
+/* =========================
+   首頁
+========================= */
+
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+}
+
+p {
+    color: #bfc5e8;
+    font-size: 18px;
+    margin-bottom: 35px;
+}
+
+button {
+    border: none;
+    background: #7c5cff;
+    color: white;
+    padding: 16px 30px;
+    border-radius: 30px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #957cff;
+}
+
+
+/* =========================
+   聊天頁面
+========================= */
+
+.chat-page {
+    display: none;
+    height: 100vh;
+    max-width: 700px;
+    margin: 0 auto;
+    flex-direction: column;
+    background: #0d1133;
+}
+
+
+/* 聊天室頂部 */
+
+.chat-header {
+    padding: 20px;
+    background: #11163d;
+    border-bottom: 1px solid #272d5d;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header h2 {
+    margin: 0 0 5px;
+    font-size: 22px;
+}
+
+.chat-header span {
+    color: #9da5d1;
+    font-size: 14px;
+}
+
+
+/* 離開按鈕 */
+
+.leave-btn {
+    background: transparent;
+    border: 1px solid #555c91;
+    padding: 10px 18px;
+    font-size: 14px;
+}
+
+.leave-btn:hover {
+    background: #252b59;
+}
+
+
+/* 訊息區 */
+
+.messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 25px 20px;
+}
+
+
+/* 訊息 */
+
+.message {
+    margin-bottom: 20px;
+    max-width: 75%;
+}
+
+.message.other {
+    margin-right: auto;
+}
+
+.message.me {
+    margin-left: auto;
+    text-align: right;
+}
+
+.name {
+    display: block;
+    color: #929ac8;
+    font-size: 13px;
+    margin-bottom: 6px;
+}
+
+
+/* 對話泡泡 */
+
+.bubble {
+    display: inline-block;
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: #242a55;
+    color: #f5f6ff;
+    line-height: 1.5;
+    text-align: left;
+}
+
+
+/* 自己的訊息 */
+
+.message.me .bubble {
+    background: #7c5cff;
+}
+
+
+/* 輸入區 */
+
+.chat-input {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    background: #11163d;
+    border-top: 1px solid #272d5d;
+}
+
+.chat-input input {
+    flex: 1;
+    min-width: 0;
+    padding: 14px 18px;
+    border: none;
+    outline: none;
+    border-radius: 25px;
+    background: #20264d;
+    color: white;
+    font-size: 16px;
+}
+
+.chat-input input::placeholder {
+    color: #858cb4;
+}
+
+.chat-input button {
+    padding: 12px 22px;
+    font-size: 16px;
+}
+
+
+/* 手機版 */
+
+@media (max-width: 600px) {
+
+    .chat-page {
+        width: 100%;
+    }
+
+    .message {
+        max-width: 85%;
+    }
+
+    .chat-header {
+        padding: 15px;
+    }
+
+    .chat-input {
+        padding: 10px;
+    }
+
+    .chat-input button {
+        padding: 12px 18px;
+    }
+}
