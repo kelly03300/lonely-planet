@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>寂寞星球｜管理中心</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Noto Sans TC",
+                sans-serif;
+
+            color: white;
+
+            background:
+                radial-gradient(
+                    circle at 20% 20%,
+                    rgba(120, 100, 255, 0.25),
+                    transparent 30%
+                ),
+                radial-gradient(
+                    circle at 80% 70%,
+                    rgba(80, 160, 255, 0.15),
+                    transparent 30%
+                ),
+                #050816;
+
+            padding: 30px 20px;
+        }
+
+
+        .admin-container {
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+
+
+        /* =========================
+           登入畫面
+           ========================= */
+
+        .login-card {
+            max-width: 420px;
+            margin: 100px auto 0;
+
+            padding: 35px;
+
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            border-radius: 24px;
+
+            backdrop-filter: blur(15px);
+
+            text-align: center;
+        }
+
+
+        .login-card h1 {
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+
+        .login-card p {
+            color: #aeb8d4;
+            margin-bottom: 25px;
+        }
+
+
+        .password-input {
+            width: 100%;
+
+            padding: 14px 16px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: rgba(255, 255, 255, 0.1);
+
+            color: white;
+
+            font-size: 16px;
+
+            outline: none;
+
+            margin-bottom: 15px;
+        }
+
+
+        .password-input::placeholder {
+            color: #8993ae;
+        }
+
+
+        .login-button {
+            width: 100%;
+
+            padding: 14px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            background: #6d6cff;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+        }
+
+
+        .login-button:hover {
+            background: #807fff;
+        }
+
+
+        .login-error {
+            color: #ff7b8a;
+
+            margin-top: 15px;
+
+            display: none;
+        }
+
+
+        /* =========================
+           管理中心
+           ========================= */
+
+        #adminPanel {
+            display: none;
+        }
+
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+
+        .header h1 {
+            margin: 0 0 10px;
+            font-size: 32px;
+        }
+
+
+        .header p {
+            margin: 0;
+            color: #aeb8d4;
+        }
+
+
+        .status-card {
+            background: rgba(255, 255, 255, 0.08);
+
+            border: 1px solid rgba(255, 255, 255, 0.12);
+
+            border-radius: 20px;
+
+            padding: 25px;
+
+            margin-bottom: 20px;
+
+            backdrop-filter: blur(12px);
+        }
+
+
+        .online-title {
+            color: #aeb8d4;
+            margin-bottom: 8px;
+        }
+
+
+        .online-count {
+            font-size: 48px;
+            font-weight: bold;
+            color: #70ff9b;
+        }
+
+
+        .online-list {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 12px;
+        }
+
+
+        .user-card {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background: rgba(255, 255, 255, 0.06);
+
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+
+        .user-name {
+            font-size: 17px;
+        }
+
+
+        .online-status {
+            color: #70ff9b;
+
+            font-size: 14px;
+        }
+
+
+        .empty {
+            text-align: center;
+
+            color: #8e98b5;
+
+            padding: 30px 10px;
+        }
+
+
+        .updated {
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #727c99;
+
+            font-size: 13px;
+        }
+
+
+        .logout-button {
+            display: block;
+
+            margin: 20px auto 0;
+
+            padding: 10px 20px;
+
+            border: 1px solid rgba(255, 255, 255, 0.15);
+
+            border-radius: 10px;
+
+            background: transparent;
+
+            color: #aeb8d4;
+
+            cursor: pointer;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+    <div class="admin-container">
+
+
+        <!-- =========================
+             登入
+             ========================= -->
+
+        <div
+            class="login-card"
+            id="loginPanel"
+        >
+
+            <h1>🌌 寂寞星球</h1>
+
+            <p>
+                管理員登入
+            </p>
+
+
+            <input
+                type="password"
+                id="passwordInput"
+                class="password-input"
+                placeholder="請輸入管理員密碼"
+                autocomplete="current-password"
+            >
+
+
+            <button
+                class="login-button"
+                id="loginButton"
+            >
+                🔐 登入管理中心
+            </button>
+
+
+            <div
+                class="login-error"
+                id="loginError"
+            >
+                密碼錯誤，請再試一次。
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             管理中心
+             ========================= -->
+
+        <div id="adminPanel">
+
+            <div class="header">
+
+                <h1>🌌 寂寞星球</h1>
+
+                <p>
+                    管理中心
+                </p>
+
+            </div>
+
+
+            <div class="status-card">
+
+                <div class="online-title">
+                    🟢 目前在線
+                </div>
+
+                <div
+                    class="online-count"
+                    id="onlineCount"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="status-card">
+
+                <div class="online-title">
+                    👥 在線使用者
+                </div>
+
+                <div
+                    class="online-list"
+                    id="onlineList"
+                >
+                    <div class="empty">
+                        正在載入...
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div
+                class="updated"
+                id="updated"
+            >
+                正在取得資料...
+            </div>
+
+
+            <button
+                class="logout-button"
+                id="logoutButton"
+            >
+                登出管理中心
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let adminPassword = null;
+
+
+        // =========================
+        // 登入
+        // =========================
+
+        async function login() {
+
+            const password =
+                document.getElementById(
+                    "passwordInput"
+                ).value;
+
+
+            if (!password) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/admin-login",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                password: password
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                if (!data.success) {
+
+                    document.getElementById(
+                        "loginError"
+                    ).style.display = "block";
+
+                    return;
+                }
+
+
+                adminPassword = password;
+
+
+                document.getElementById(
+                    "loginPanel"
+                ).style.display = "none";
+
+
+                document.getElementById(
+                    "adminPanel"
+                ).style.display = "block";
+
+
+                loadOnlineUsers();
+
+            } catch (error) {
+
+                console.error(
+                    "登入失敗：",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =========================
+        // 取得在線使用者
+        // =========================
+
+        async function loadOnlineUsers() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/online-users"
+                    );
+
+
+                if (!response.ok) {
+
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                document.getElementById(
+                    "onlineCount"
+                ).textContent =
+                    data.count;
+
+
+                const list =
+                    document.getElementById(
+                        "onlineList"
+                    );
+
+
+                if (data.users.length === 0) {
+
+                    list.innerHTML = `
+                        <div class="empty">
+                            目前沒有使用者在線 🌙
+                        </div>
+                    `;
+
+                } else {
+
+                    list.innerHTML =
+                        data.users
+                            .map(user => {
+
+                                return `
+                                    <div class="user-card">
+
+                                        <div class="user-name">
+                                            ${user.name}
+                                        </div>
+
+                                        <div class="online-status">
+                                            ● 在線
+                                        </div>
+
+                                    </div>
+                                `;
+
+                            })
+                            .join("");
+
+                }
+
+
+                document.getElementById(
+                    "updated"
+                ).textContent =
+                    "最後更新：" +
+                    new Date().toLocaleTimeString(
+                        "zh-TW"
+                    );
+
+            } catch (error) {
+
+                console.error(
+                    "取得在線資料失敗：",
+                    error
+                );
+
+            }
+
+        }
+
+
+        // =========================
+        // 登出
+        // =========================
+
+        document.getElementById(
+            "logoutButton"
+        ).addEventListener(
+            "click",
+            () => {
+
+                adminPassword = null;
+
+                document.getElementById(
+                    "adminPanel"
+                ).style.display = "none";
+
+                document.getElementById(
+                    "loginPanel"
+                ).style.display = "block";
+
+                document.getElementById(
+                    "passwordInput"
+                ).value = "";
+
+            }
+        );
+
+
+        // =========================
+        // 按鈕登入
+        // =========================
+
+        document.getElementById(
+            "loginButton"
+        ).addEventListener(
+            "click",
+            login
+        );
+
+
+        // Enter 登入
+        document.getElementById(
+            "passwordInput"
+        ).addEventListener(
+            "keydown",
+            (event) => {
+
+                if (event.key === "Enter") {
+
+                    login();
+
+                }
+
+            }
+        );
+
+
+        // 每 3 秒更新
+        setInterval(
+            () => {
+
+                if (adminPassword) {
+
+                    loadOnlineUsers();
+
+                }
+
+            },
+            3000
+        );
+
+    </script>
+
+</body>
+
+</html>
