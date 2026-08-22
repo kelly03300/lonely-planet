@@ -1,9 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>寂寞星球</title>
+
+    <title>寂寞星球｜免費匿名聊天・找陌生人聊天</title>
+
+    <meta
+        name="description"
+        content="寂寞星球是一個免費匿名聊天網站，讓你隨時找個人聊聊，和陌生人隨機配對，分享心情與想說的話。"
+    >
+
+    <meta
+        name="keywords"
+        content="寂寞聊天,免費聊天,匿名聊天,陌生人聊天,找人聊天,免費聊天室,匿名聊天室,深夜聊天"
+    >
+
+    <meta name="robots" content="index, follow">
+
+    <link
+        rel="canonical"
+        href="https://lonely-planet-chat.onrender.com/"
+    >
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta
+        property="og:title"
+        content="寂寞星球｜免費匿名聊天・找陌生人聊天"
+    >
+    <meta
+        property="og:description"
+        content="寂寞星球是一個免費匿名聊天網站，讓你隨時找個人聊聊，和陌生人隨機配對，分享心情與想說的話。"
+    >
+    <meta
+        property="og:url"
+        content="https://lonely-planet-chat.onrender.com/"
+    >
+    <meta property="og:site_name" content="寂寞星球">
+    <meta property="og:locale" content="zh_TW">
+
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,11 +48,22 @@
 
     <!-- 首頁 -->
     <div class="container" id="home">
-        <h1>🌌 寂寞星球</h1>
 
-        <p>每個人都有一些，想找人說說的話。</p>
+        <h1>🌌 寂寞星球｜免費匿名聊天</h1>
 
-        <button id="startChat">🌙 找個人聊聊</button>
+        <p>
+            每個人都有一些，想找人說說的話。
+        </p>
+
+        <p>
+            在寂寞星球，你可以免費匿名地和陌生人聊天，
+            隨機找一個人聊聊，分享今天的心情。
+        </p>
+
+        <button id="startChat">
+            🌙 找個人聊聊
+        </button>
+
     </div>
 
 
@@ -23,22 +71,40 @@
     <div class="chat-page" id="chatPage">
 
         <div class="chat-header">
+
             <div>
                 <h2>🌙 寂寞星球</h2>
-                <span>你正在和一位陌生人聊天</span>
+
+                <span>
+                    你正在和一位陌生人聊天
+                </span>
             </div>
 
-            <button class="leave-btn" id="leaveChat">離開</button>
+            <button
+                class="leave-btn"
+                id="leaveChat"
+            >
+                離開
+            </button>
+
         </div>
 
 
-        <div class="messages" id="messages">
+        <div
+            class="messages"
+            id="messages"
+        >
 
             <div class="message other">
-                <span class="name">陌生人</span>
+
+                <span class="name">
+                    陌生人
+                </span>
+
                 <div class="bubble">
                     嗨，你今天過得還好嗎？
                 </div>
+
             </div>
 
         </div>
@@ -53,13 +119,21 @@
                 autocomplete="off"
             >
 
-            <button id="sendMessage">送出</button>
+            <button id="sendMessage">
+                送出
+            </button>
 
         </div>
 
     </div>
 
 
+    <!-- Socket.io -->
     <script src="/socket.io/socket.io.js"></script>
+
+    <!-- 聊天功能 -->
     <script src="script.js"></script>
+
+</body>
+
 </html>
