@@ -4,6 +4,1157 @@
 
 html,
 body {
+
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+}
+
+
+html {
+
+    overflow: hidden;
+}
+
+
+body {
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            rgba(75, 45, 145, 0.25),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(35, 55, 125, 0.18),
+            transparent 40%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(90, 35, 130, 0.16),
+            transparent 40%
+        ),
+        linear-gradient(
+            135deg,
+            #050719 0%,
+            #080b24 45%,
+            #10082c 75%,
+            #07091f 100%
+        );
+
+    color: white;
+
+    font-family:
+        "M PLUS Rounded 1c",
+        Arial,
+        sans-serif;
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   🌌 柔和紫藍星雲
+========================= */
+
+body::after {
+
+    content: "";
+
+    position: fixed;
+
+    inset: -20%;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    background:
+        radial-gradient(
+            ellipse at 50% 45%,
+            rgba(120, 80, 210, 0.12),
+            transparent 45%
+        ),
+        radial-gradient(
+            ellipse at 80% 20%,
+            rgba(80, 90, 210, 0.08),
+            transparent 40%
+        ),
+        radial-gradient(
+            ellipse at 20% 80%,
+            rgba(150, 60, 190, 0.07),
+            transparent 40%
+        );
+
+    filter: blur(35px);
+
+    animation:
+        nebulaGlow
+        10s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+/* =========================
+   ⭐ 星空
+========================= */
+
+body::before {
+
+    content: "";
+
+    position: fixed;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    z-index: 0;
+
+    background:
+
+        /* ✨ 白色星芒 */
+
+        radial-gradient(
+            ellipse 2px 15px at 28% 18%,
+            rgba(255,255,255,0.95) 0%,
+            rgba(255,255,255,0.45) 35%,
+            transparent 75%
+        ),
+
+        radial-gradient(
+            ellipse 15px 2px at 28% 18%,
+            rgba(255,255,255,0.95) 0%,
+            rgba(255,255,255,0.45) 35%,
+            transparent 75%
+        ),
+
+
+        /* 💜 紫色星芒 */
+
+        radial-gradient(
+            ellipse 2px 12px at 72% 32%,
+            rgba(220,175,255,0.95) 0%,
+            rgba(180,120,255,0.50) 35%,
+            transparent 75%
+        ),
+
+        radial-gradient(
+            ellipse 12px 2px at 72% 32%,
+            rgba(220,175,255,0.95) 0%,
+            rgba(180,120,255,0.50) 35%,
+            transparent 75%
+        ),
+
+
+        /* 💙 藍色星芒 */
+
+        radial-gradient(
+            ellipse 2px 13px at 16% 63%,
+            rgba(150,210,255,0.95) 0%,
+            rgba(90,170,255,0.45) 35%,
+            transparent 75%
+        ),
+
+        radial-gradient(
+            ellipse 13px 2px at 16% 63%,
+            rgba(150,210,255,0.95) 0%,
+            rgba(90,170,255,0.45) 35%,
+            transparent 75%
+        ),
+
+
+        /* 🌸 粉紫色星芒 */
+
+        radial-gradient(
+            ellipse 2px 10px at 64% 70%,
+            rgba(255,190,245,0.95) 0%,
+            rgba(235,120,220,0.45) 35%,
+            transparent 75%
+        ),
+
+        radial-gradient(
+            ellipse 10px 2px at 64% 70%,
+            rgba(255,190,245,0.95) 0%,
+            rgba(235,120,220,0.45) 35%,
+            transparent 75%
+        ),
+
+
+        /* ⭐ 小星星 */
+
+        radial-gradient(
+            circle at 12% 28%,
+            rgba(255,255,255,0.95) 0px,
+            rgba(255,255,255,0.55) 1px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 47% 13%,
+            rgba(255,255,255,0.85) 0px,
+            rgba(255,255,255,0.40) 1px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 84% 20%,
+            rgba(255,255,255,0.90) 0px,
+            rgba(255,255,255,0.40) 1px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 38% 43%,
+            rgba(255,255,255,0.80) 0px,
+            rgba(255,255,255,0.35) 1px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 90% 55%,
+            rgba(255,255,255,0.90) 0px,
+            rgba(255,255,255,0.40) 1px,
+            transparent 3px
+        ),
+
+        radial-gradient(
+            circle at 30% 78%,
+            rgba(255,255,255,0.85) 0px,
+            rgba(255,255,255,0.35) 1px,
+            transparent 3px
+        ),
+
+
+        /* 💜 紫色小星 */
+
+        radial-gradient(
+            circle at 82% 44%,
+            rgba(205,150,255,0.95) 0px,
+            rgba(180,110,255,0.45) 1px,
+            transparent 4px
+        ),
+
+        radial-gradient(
+            circle at 23% 48%,
+            rgba(190,145,255,0.90) 0px,
+            rgba(150,100,255,0.40) 1px,
+            transparent 4px
+        ),
+
+
+        /* 💙 藍色小星 */
+
+        radial-gradient(
+            circle at 7% 82%,
+            rgba(120,210,255,0.95) 0px,
+            rgba(80,170,255,0.40) 1px,
+            transparent 4px
+        ),
+
+        radial-gradient(
+            circle at 92% 76%,
+            rgba(140,210,255,0.90) 0px,
+            rgba(90,170,255,0.40) 1px,
+            transparent 4px
+        ),
+
+
+        /* 🌸 粉色小星 */
+
+        radial-gradient(
+            circle at 76% 12%,
+            rgba(255,180,235,0.95) 0px,
+            rgba(230,120,210,0.40) 1px,
+            transparent 4px
+        );
+
+    background-repeat: no-repeat;
+
+    opacity: 0.82;
+
+    animation:
+        starTwinkle
+        4s
+        ease-in-out
+        infinite
+        alternate;
+}
+
+
+/* =========================
+   ✨ 星星閃爍
+========================= */
+
+@keyframes starTwinkle {
+
+    0% {
+
+        opacity: 0.48;
+
+        filter:
+            brightness(0.85);
+    }
+
+    25% {
+
+        opacity: 0.65;
+
+        filter:
+            brightness(1.05);
+    }
+
+    50% {
+
+        opacity: 0.95;
+
+        filter:
+            brightness(1.45);
+    }
+
+    75% {
+
+        opacity: 0.60;
+
+        filter:
+            brightness(1.0);
+    }
+
+    100% {
+
+        opacity: 0.88;
+
+        filter:
+            brightness(1.30);
+    }
+}
+
+
+/* =========================
+   🌌 星雲呼吸
+========================= */
+
+@keyframes nebulaGlow {
+
+    0% {
+
+        opacity: 0.5;
+
+        transform:
+            scale(1);
+    }
+
+    50% {
+
+        opacity: 0.85;
+
+        transform:
+            scale(1.04);
+    }
+
+    100% {
+
+        opacity: 0.6;
+
+        transform:
+            scale(1);
+    }
+}
+
+
+/* =========================
+   ✨ 內容保持在星空上方
+========================= */
+
+.container,
+.chat-page {
+
+    position: relative;
+
+    z-index: 1;
+}
+
+
+/* =========================
+   🌌 首頁
+========================= */
+
+.container {
+
+    min-height: 100vh;
+
+    min-height: 100dvh;
+
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: center;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    overflow-y: auto;
+}
+
+
+/* =========================
+   🌌 主標題
+========================= */
+
+h1 {
+
+    font-size: 48px;
+
+    margin:
+        0 0 8px;
+
+    font-weight: 600;
+
+    letter-spacing: 3px;
+
+    line-height: 1.4;
+
+    text-shadow:
+        0 0 8px rgba(180,150,255,0.40),
+        0 0 20px rgba(120,130,255,0.20);
+}
+
+
+/* =========================
+   ✨ 副標題
+========================= */
+
+.subtitle {
+
+    font-size: 20px;
+
+    font-weight: 500;
+
+    color: #c7b9f5;
+
+    letter-spacing: 2px;
+
+    margin-bottom: 28px;
+
+    text-shadow:
+        0 0 10px rgba(150,120,255,0.25);
+}
+
+
+/* =========================
+   ✨ 介紹文字
+========================= */
+
+p {
+
+    color: #bfc5e8;
+
+    font-size: 18px;
+
+    margin-bottom: 35px;
+
+    line-height: 1.7;
+
+    letter-spacing: 0.5px;
+
+    font-weight: 400;
+
+    text-shadow:
+        0 0 8px rgba(100,110,180,0.15);
+}
+
+
+/* =========================
+   🌙 按鈕
+========================= */
+
+button {
+
+    border: none;
+
+    background: #7c5cff;
+
+    color: white;
+
+    padding:
+        16px 30px;
+
+    border-radius: 30px;
+
+    font-size: 18px;
+
+    font-family:
+        "M PLUS Rounded 1c",
+        Arial,
+        sans-serif;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 12px rgba(124,92,255,0.20);
+
+    transition:
+        background 0.25s ease,
+        box-shadow 0.25s ease,
+        transform 0.25s ease;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+
+button:hover {
+
+    background: #957cff;
+
+    box-shadow:
+        0 0 18px rgba(149,124,255,0.45);
+
+    transform:
+        translateY(-1px);
+}
+
+
+/* =========================
+   💬 聊天頁面
+========================= */
+
+.chat-page {
+
+    display: none;
+
+    width: 100%;
+
+    max-width: 700px;
+
+    height: 100vh;
+
+    height: 100dvh;
+
+    max-height: 100dvh;
+
+    margin: 0 auto;
+
+    flex-direction: column;
+
+    background: #0d1133;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   💬 聊天室頂部
+========================= */
+
+.chat-header {
+
+    padding: 20px;
+
+    background: #11163d;
+
+    border-bottom:
+        1px solid #272d5d;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    flex-shrink: 0;
+
+    box-sizing: border-box;
+}
+
+
+.chat-header h2 {
+
+    margin:
+        0 0 5px;
+
+    font-size: 22px;
+
+    font-weight: 600;
+
+    letter-spacing: 1px;
+}
+
+
+.chat-header span {
+
+    color: #9da5d1;
+
+    font-size: 14px;
+
+    letter-spacing: 0.3px;
+}
+
+
+/* =========================
+   🚪 離開按鈕
+========================= */
+
+.leave-btn {
+
+    background: transparent;
+
+    border:
+        1px solid #555c91;
+
+    padding:
+        10px 18px;
+
+    font-size: 14px;
+
+    box-shadow: none;
+
+    transform: none;
+
+    flex-shrink: 0;
+}
+
+
+.leave-btn:hover {
+
+    background: #252b59;
+
+    box-shadow: none;
+
+    transform: none;
+}
+
+
+/* =========================
+   💬 訊息區
+========================= */
+
+.messages {
+
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    padding:
+        25px 20px;
+
+    box-sizing: border-box;
+
+    -webkit-overflow-scrolling: touch;
+
+    overscroll-behavior: contain;
+
+    scroll-behavior: auto;
+}
+
+
+/* =========================
+   💬 訊息
+========================= */
+
+.message {
+
+    margin-bottom: 20px;
+
+    max-width: 75%;
+}
+
+
+.message.other {
+
+    margin-right: auto;
+}
+
+
+.message.me {
+
+    margin-left: auto;
+
+    text-align: right;
+}
+
+
+.name {
+
+    display: block;
+
+    color: #929ac8;
+
+    font-size: 13px;
+
+    margin-bottom: 6px;
+}
+
+
+/* =========================
+   💬 對話泡泡
+========================= */
+
+.bubble {
+
+    display: inline-block;
+
+    padding:
+        12px 16px;
+
+    border-radius: 18px;
+
+    background: #242a55;
+
+    color: #f5f6ff;
+
+    line-height: 1.5;
+
+    text-align: left;
+
+    overflow-wrap: anywhere;
+
+    word-break: break-word;
+}
+
+
+/* =========================
+   💜 自己的訊息
+========================= */
+
+.message.me .bubble {
+
+    background: #7c5cff;
+}
+
+
+/* =========================
+   ⌨️ 輸入區
+========================= */
+
+.chat-input {
+
+    display: flex;
+
+    gap: 10px;
+
+    padding:
+        10px 15px;
+
+    background: #11163d;
+
+    border-top:
+        1px solid #272d5d;
+
+    flex-shrink: 0;
+
+    box-sizing: border-box;
+
+    position: relative;
+
+    z-index: 5;
+}
+
+
+/* =========================
+   ⌨️ 輸入框
+========================= */
+
+.chat-input input {
+
+    flex: 1;
+
+    min-width: 0;
+
+    height: 48px;
+
+    padding:
+        0 18px;
+
+    border: none;
+
+    outline: none;
+
+    border-radius: 25px;
+
+    background: #20264d;
+
+    color: white;
+
+    font-size: 16px;
+
+    font-family:
+        "M PLUS Rounded 1c",
+        Arial,
+        sans-serif;
+
+    box-sizing: border-box;
+
+    -webkit-appearance: none;
+}
+
+
+.chat-input input::placeholder {
+
+    color: #858cb4;
+}
+
+
+/* =========================
+   📤 送出按鈕
+========================= */
+
+.chat-input button {
+
+    height: 48px;
+
+    padding:
+        0 22px;
+
+    font-size: 16px;
+
+    flex-shrink: 0;
+
+    touch-action: manipulation;
+}
+
+
+/* =========================
+   📱 手機版
+========================= */
+
+@media (max-width: 600px) {
+
+
+    /* -------------------------
+       聊天室
+    ------------------------- */
+
+    .chat-page {
+
+        width: 100%;
+
+        height: 100vh;
+
+        height: 100dvh;
+
+        max-height: 100dvh;
+
+        overflow: hidden;
+    }
+
+
+    /* -------------------------
+       聊天室頂部
+    ------------------------- */
+
+    .chat-header {
+
+        padding:
+            12px 15px;
+
+        min-height: 64px;
+    }
+
+
+    .chat-header h2 {
+
+        font-size: 19px;
+
+        margin:
+            0 0 3px;
+    }
+
+
+    .chat-header span {
+
+        font-size: 12px;
+    }
+
+
+    /* -------------------------
+       離開按鈕
+    ------------------------- */
+
+    .leave-btn {
+
+        padding:
+            8px 14px;
+
+        font-size: 13px;
+    }
+
+
+    /* -------------------------
+       訊息區
+    ------------------------- */
+
+    .messages {
+
+        min-height: 0;
+
+        padding:
+            15px 12px;
+
+        overflow-y: auto;
+
+        -webkit-overflow-scrolling: touch;
+
+        overscroll-behavior: contain;
+    }
+
+
+    .message {
+
+        max-width: 85%;
+
+        margin-bottom: 15px;
+    }
+
+
+    .name {
+
+        font-size: 12px;
+
+        margin-bottom: 5px;
+    }
+
+
+    .bubble {
+
+        padding:
+            10px 14px;
+
+        border-radius: 16px;
+
+        font-size: 15px;
+
+        line-height: 1.5;
+    }
+
+
+    /* -------------------------
+       輸入區
+    ------------------------- */
+
+    .chat-input {
+
+        gap: 8px;
+
+        padding:
+            8px 10px;
+
+        padding-bottom:
+            calc(
+                8px +
+                env(safe-area-inset-bottom)
+            );
+    }
+
+
+    /* -------------------------
+       輸入框
+    ------------------------- */
+
+    .chat-input input {
+
+        height: 42px;
+
+        padding:
+            0 15px;
+
+        font-size: 16px;
+    }
+
+
+    /* -------------------------
+       送出按鈕
+    ------------------------- */
+
+    .chat-input button {
+
+        height: 42px;
+
+        padding:
+            0 16px;
+
+        font-size: 15px;
+    }
+
+
+    /* -------------------------
+       首頁
+    ------------------------- */
+
+    h1 {
+
+        font-size: 36px;
+
+        letter-spacing: 2px;
+    }
+
+
+    .subtitle {
+
+        font-size: 17px;
+
+        letter-spacing: 1.5px;
+    }
+
+
+    p {
+
+        font-size: 17px;
+    }
+}
+
+
+/* =========================
+   📱 更小的手機
+========================= */
+
+@media (max-width: 380px) {
+
+    .chat-header {
+
+        padding:
+            10px 12px;
+
+        min-height: 58px;
+    }
+
+
+    .chat-header h2 {
+
+        font-size: 17px;
+    }
+
+
+    .chat-header span {
+
+        font-size: 11px;
+    }
+
+
+    .leave-btn {
+
+        padding:
+            7px 11px;
+
+        font-size: 12px;
+    }
+
+
+    .messages {
+
+        padding:
+            12px 10px;
+    }
+
+
+    .bubble {
+
+        font-size: 14px;
+
+        padding:
+            9px 12px;
+    }
+
+
+    .chat-input {
+
+        gap: 6px;
+
+        padding-left:
+            8px;
+
+        padding-right:
+            8px;
+    }
+
+
+    .chat-input button {
+
+        padding:
+            0 13px;
+
+        font-size: 14px;
+    }
+}
+
+
+/* =========================
+   📱 橫向手機
+========================= */
+
+@media (max-width: 900px) and (orientation: landscape) {
+
+    .chat-header {
+
+        padding:
+            8px 15px;
+    }
+
+
+    .chat-header h2 {
+
+        font-size: 17px;
+
+        margin-bottom: 2px;
+    }
+
+
+    .chat-header span {
+
+        font-size: 11px;
+    }
+
+
+    .messages {
+
+        padding:
+            10px 15px;
+    }
+
+
+    .chat-input {
+
+        padding:
+            6px 10px;
+    }
+
+
+    .chat-input input,
+    .chat-input button {
+
+        height: 38px;
+    }
+}
+* =========================
+   🌌 基本設定
+========================= */
+
+html,
+body {
     margin: 0;
 
     width: 100%;
