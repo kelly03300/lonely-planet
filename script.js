@@ -1,13 +1,13 @@
-/* =========================
+/* =========================================================
    🔌 Socket.io
-========================= */
+========================================================= */
 
 const socket = io();
 
 
-/* =========================
+/* =========================================================
    📌 DOM
-========================= */
+========================================================= */
 
 const home =
     document.getElementById("home");
@@ -31,22 +31,29 @@ const messages =
     document.getElementById("messages");
 
 
-/* =========================
+/* =========================================================
    👤 目前聊天對象
-========================= */
+========================================================= */
 
-let strangerName =
-    "陌生人";
+let strangerName = "陌生人";
 
 
-/* =========================
-   🔌 Socket 連線狀態
-========================= */
+/* =========================================================
+   🔒 防止重複送出
+========================================================= */
+
+let sending = false;
+
+
+/* =========================================================
+   🔌 Socket 連線
+========================================================= */
 
 socket.on("connect", () => {
 
     console.log(
-        "Socket 已連線"
+        "Socket 已連線：",
+        socket.id
     );
 
 });
@@ -61,16 +68,23 @@ socket.on("disconnect", () => {
 });
 
 
-/* =========================
-   📜 捲動到最新訊息
-========================= */
+/* =========================================================
+   📜 捲動到底
+========================================================= */
 
 function scrollToBottom() {
 
     /*
-     * 使用 requestAnimationFrame
-     * 確保新訊息已經真正加入 DOM
-     * 再進行捲動。
+     * 第一層：立即捲到底
+     */
+
+    messages.scrollTop =
+        messages.scrollHeight;
+
+
+    /*
+     * 第二層：等瀏覽器完成 DOM 排版後
+     * 再捲一次。
      */
 
     requestAnimationFrame(() => {
@@ -83,107 +97,64 @@ function scrollToBottom() {
 }
 
 
-/* =========================
-   📱 iPhone / 手機鍵盤處理
-========================= */
+/* =========================================================
+   📱 鍵盤收起
+========================================================= */
 
-function updateViewportHeight() {
-
-    /*
-     * visualViewport 是手機瀏覽器
-     * 真正可看到的畫面高度。
-     *
-     * iPhone 鍵盤出現時，
-     * window.innerHeight 不一定會立即正確變化。
-     */
-
-    if (!window.visualViewport) {
-        return;
-    }
-
-
-    const viewport =
-        window.visualViewport;
-
+function closeKeyboard() {
 
     /*
-     * 計算目前實際可視高度。
+     * iPhone Safari：
+     * blur 可以讓輸入框失去焦點。
      */
 
-    const height =
-        viewport.height;
+    if (
+        document.activeElement ===
+        messageInput
+    ) {
 
-
-    /*
-     * 只有手機尺寸才處理。
-     */
-
-    if (window.innerWidth <= 600) {
-
-        chatPage.style.height =
-            `${height}px`;
+        messageInput.blur();
 
     }
 
 }
 
 
-/* =========================
-   📱 監聽手機鍵盤 / 畫面變化
-========================= */
+/* =========================================================
+   📱 鍵盤收起後重新捲到底
+========================================================= */
 
-if (window.visualViewport) {
+function scrollAfterKeyboard() {
 
-    window.visualViewport.addEventListener(
-        "resize",
-        () => {
-
-            updateViewportHeight();
-
-            /*
-             * 鍵盤出現或消失後，
-             * 稍微延遲再捲到底。
-             */
-
-            setTimeout(() => {
-
-                scrollToBottom();
-
-            }, 50);
-
-        }
-    );
+    scrollToBottom();
 
 
-    window.visualViewport.addEventListener(
-        "scroll",
-        () => {
+    setTimeout(() => {
 
-            updateViewportHeight();
+        scrollToBottom();
 
-        }
-    );
+    }, 100);
+
+
+    setTimeout(() => {
+
+        scrollToBottom();
+
+    }, 300);
+
+
+    setTimeout(() => {
+
+        scrollToBottom();
+
+    }, 500);
 
 }
 
 
-/* =========================
-   📱 Window resize
-========================= */
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        updateViewportHeight();
-
-    }
-);
-
-
-/* =========================
-   🌙 開始找陌生人
-========================= */
+/* =========================================================
+   🌙 開始聊天
+========================================================= */
 
 startChat.addEventListener(
     "click",
@@ -196,10 +167,6 @@ startChat.addEventListener(
         chatPage.style.display =
             "flex";
 
-
-        /*
-         * 重設聊天室
-         */
 
         strangerName =
             "陌生人";
@@ -224,13 +191,6 @@ startChat.addEventListener(
         `;
 
 
-        /*
-         * 更新手機可視高度
-         */
-
-        updateViewportHeight();
-
-
         scrollToBottom();
 
 
@@ -238,57 +198,12 @@ startChat.addEventListener(
          * 開始配對
          */
 
-        if (socket.connected) {
+        if (
+            socket.connected
+        ) {
 
             socket.emit(
                 "findStranger"
-            );
-
-        } else {
-
-            messages.innerHTML = `
-                <div class="message other">
-
-                    <span class="name">
-                        寂寞星球
-                    </span>
-
-                    <div class="bubble">
-                        🔌 正在連線，請稍候……
-                    </div>
-
-                </div>
-            `;
-
-
-            /*
-             * Socket 連線後再開始配對
-             */
-
-            socket.once(
-                "connect",
-                () => {
-
-                    messages.innerHTML = `
-                        <div class="message other">
-
-                            <span class="name">
-                                寂寞星球
-                            </span>
-
-                            <div class="bubble">
-                                🌙 正在尋找一位陌生人……
-                            </div>
-
-                        </div>
-                    `;
-
-
-                    socket.emit(
-                        "findStranger"
-                    );
-
-                }
             );
 
         }
@@ -297,9 +212,9 @@ startChat.addEventListener(
 );
 
 
-/* =========================
+/* =========================================================
    ⏳ 等待配對
-========================= */
+========================================================= */
 
 socket.on(
     "waiting",
@@ -313,9 +228,9 @@ socket.on(
 );
 
 
-/* =========================
+/* =========================================================
    ✨ 配對成功
-========================= */
+========================================================= */
 
 socket.on(
     "matched",
@@ -339,7 +254,9 @@ socket.on(
                     你遇見了：
 
                     <strong>
-                        ${anonymousName}
+                        ${escapeHtml(
+                            anonymousName
+                        )}
                     </strong>
 
                     <br><br>
@@ -356,33 +273,59 @@ socket.on(
 
 
         /*
-         * 注意：
+         * 故意不自動 focus。
          *
-         * 這裡不再自動 focus。
-         *
-         * 避免 iPhone 自動叫出鍵盤。
+         * 避免 iPhone 自動跳出鍵盤。
          */
 
     }
 );
 
 
-/* =========================
+/* =========================================================
+   🔐 HTML 安全處理
+========================================================= */
+
+function escapeHtml(text) {
+
+    const div =
+        document.createElement(
+            "div"
+        );
+
+
+    div.textContent =
+        text;
+
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================================
    📨 發送訊息
-========================= */
+========================================================= */
 
 function send() {
 
     /*
-     * 取得輸入文字
+     * 防止同一時間重複執行
      */
+
+    if (sending) {
+
+        return;
+
+    }
+
 
     const text =
         messageInput.value.trim();
 
 
     /*
-     * 不允許空白訊息
+     * 空白訊息不送
      */
 
     if (text === "") {
@@ -407,30 +350,63 @@ function send() {
     }
 
 
-    /* =========================
-       顯示自己的訊息
-    ========================= */
+    /*
+     * 鎖定短時間內的重複觸發
+     */
+
+    sending = true;
+
+
+    /* =====================================================
+       先顯示自己的訊息
+    ===================================================== */
 
     const message =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
 
     message.className =
         "message me";
 
 
-    message.innerHTML = `
-        <span class="name">
-            你
-        </span>
-
-        <div class="bubble"></div>
-    `;
+    const name =
+        document.createElement(
+            "span"
+        );
 
 
-    message
-        .querySelector(".bubble")
-        .textContent = text;
+    name.className =
+        "name";
+
+
+    name.textContent =
+        "你";
+
+
+    const bubble =
+        document.createElement(
+            "div"
+        );
+
+
+    bubble.className =
+        "bubble";
+
+
+    bubble.textContent =
+        text;
+
+
+    message.appendChild(
+        name
+    );
+
+
+    message.appendChild(
+        bubble
+    );
 
 
     messages.appendChild(
@@ -438,9 +414,24 @@ function send() {
     );
 
 
-    /* =========================
-       傳送給陌生人
-    ========================= */
+    /*
+     * 先把輸入框清空
+     */
+
+    messageInput.value =
+        "";
+
+
+    /*
+     * 立刻捲到底
+     */
+
+    scrollToBottom();
+
+
+    /* =====================================================
+       傳給 Socket.io
+    ===================================================== */
 
     socket.emit(
         "sendMessage",
@@ -448,64 +439,46 @@ function send() {
     );
 
 
-    /* =========================
-       清空輸入框
-    ========================= */
+    /* =====================================================
+       iPhone 關閉鍵盤
+    ===================================================== */
 
-    messageInput.value =
-        "";
-
-
-    /* =========================
-       手機鍵盤收起
-    ========================= */
-
-    messageInput.blur();
-
-
-    /* =========================
-       捲到最新訊息
-    ========================= */
-
-    scrollToBottom();
+    closeKeyboard();
 
 
     /*
-     * iPhone 鍵盤開始收起後，
-     * 再補一次捲動。
+     * 鍵盤開始收起後，
+     * 多次確認畫面已經到底。
      */
 
-    setTimeout(() => {
-
-        scrollToBottom();
-
-    }, 100);
+    scrollAfterKeyboard();
 
 
-    setTimeout(() => {
+    /*
+     * 解鎖
+     */
 
-        scrollToBottom();
+    setTimeout(
+        () => {
 
-    }, 300);
+            sending = false;
+
+        },
+        350
+    );
 
 }
 
 
-/* =========================
-   📤 點擊送出
-========================= */
+/* =========================================================
+   📤 按「送出」
+========================================================= */
 
 sendMessage.addEventListener(
     "click",
     (event) => {
 
-        /*
-         * 防止手機瀏覽器
-         * 產生額外的預設行為。
-         */
-
         event.preventDefault();
-
 
         send();
 
@@ -513,9 +486,9 @@ sendMessage.addEventListener(
 );
 
 
-/* =========================
-   ⌨️ Enter 送出
-========================= */
+/* =========================================================
+   ⌨️ Enter
+========================================================= */
 
 messageInput.addEventListener(
     "keydown",
@@ -535,39 +508,60 @@ messageInput.addEventListener(
 );
 
 
-/* =========================
-   💬 收到陌生人的訊息
-========================= */
+/* =========================================================
+   💬 收到陌生人訊息
+========================================================= */
 
 socket.on(
     "receiveMessage",
     (text) => {
 
         const message =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         message.className =
             "message other";
 
 
-        message.innerHTML = `
-            <span class="name"></span>
+        const name =
+            document.createElement(
+                "span"
+            );
 
-            <div class="bubble"></div>
-        `;
+
+        name.className =
+            "name";
 
 
-        message
-            .querySelector(".name")
-            .textContent =
+        name.textContent =
             strangerName;
 
 
-        message
-            .querySelector(".bubble")
-            .textContent =
+        const bubble =
+            document.createElement(
+                "div"
+            );
+
+
+        bubble.className =
+            "bubble";
+
+
+        bubble.textContent =
             text;
+
+
+        message.appendChild(
+            name
+        );
+
+
+        message.appendChild(
+            bubble
+        );
 
 
         messages.appendChild(
@@ -581,37 +575,92 @@ socket.on(
 );
 
 
-/* =========================
+/* =========================================================
    🚪 陌生人離開
-========================= */
+========================================================= */
 
 socket.on(
     "strangerLeft",
     () => {
 
         const message =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         message.className =
             "message other";
 
 
-        message.innerHTML = `
-            <span class="name">
-                寂寞星球
-            </span>
+        const name =
+            document.createElement(
+                "span"
+            );
 
-            <div class="bubble">
 
-                🌙 ${strangerName}
-                已離開聊天室。<br><br>
+        name.className =
+            "name";
 
-                也許下一次，
-                會遇見另一個想說說話的人。
 
-            </div>
-        `;
+        name.textContent =
+            "寂寞星球";
+
+
+        const bubble =
+            document.createElement(
+                "div"
+            );
+
+
+        bubble.className =
+            "bubble";
+
+
+        bubble.innerHTML =
+            "";
+
+
+        const title =
+            document.createTextNode(
+                `🌙 ${strangerName} 已離開聊天室。`
+            );
+
+
+        bubble.appendChild(
+            title
+        );
+
+
+        bubble.appendChild(
+            document.createElement(
+                "br"
+            )
+        );
+
+
+        bubble.appendChild(
+            document.createElement(
+                "br"
+            )
+        );
+
+
+        bubble.appendChild(
+            document.createTextNode(
+                "也許下一次，會遇見另一個想說說話的人。"
+            )
+        );
+
+
+        message.appendChild(
+            name
+        );
+
+
+        message.appendChild(
+            bubble
+        );
 
 
         messages.appendChild(
@@ -619,9 +668,9 @@ socket.on(
         );
 
 
-        /* =========================
-           再找一個人
-        ========================= */
+        /* =================================================
+           再找一個人按鈕
+        ================================================= */
 
         const button =
             document.createElement(
@@ -631,6 +680,10 @@ socket.on(
 
         button.id =
             "findAgain";
+
+
+        button.type =
+            "button";
 
 
         button.textContent =
@@ -645,9 +698,9 @@ socket.on(
         scrollToBottom();
 
 
-        /* =========================
+        /* =================================================
            再找一個人
-        ========================= */
+        ================================================= */
 
         button.addEventListener(
             "click",
@@ -678,15 +731,42 @@ socket.on(
                     "message other";
 
 
-                waitingMessage.innerHTML = `
-                    <span class="name">
-                        寂寞星球
-                    </span>
+                const waitingName =
+                    document.createElement(
+                        "span"
+                    );
 
-                    <div class="bubble">
-                        🌙 正在尋找一位陌生人……
-                    </div>
-                `;
+
+                waitingName.className =
+                    "name";
+
+
+                waitingName.textContent =
+                    "寂寞星球";
+
+
+                const waitingBubble =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                waitingBubble.className =
+                    "bubble";
+
+
+                waitingBubble.textContent =
+                    "🌙 正在尋找一位陌生人……";
+
+
+                waitingMessage.appendChild(
+                    waitingName
+                );
+
+
+                waitingMessage.appendChild(
+                    waitingBubble
+                );
 
 
                 messages.appendChild(
@@ -718,28 +798,41 @@ socket.on(
 );
 
 
-/* =========================
+/* =========================================================
    🚪 離開聊天室
-========================= */
+========================================================= */
 
 leaveChat.addEventListener(
     "click",
-    () => {
+    (event) => {
 
-        socket.emit(
-            "leaveChat"
-        );
+        event.preventDefault();
 
 
         /*
-         * 收起手機鍵盤
+         * 通知 Server
          */
 
-        messageInput.blur();
+        if (
+            socket.connected
+        ) {
+
+            socket.emit(
+                "leaveChat"
+            );
+
+        }
 
 
         /*
-         * 清空輸入框
+         * 關閉鍵盤
+         */
+
+        closeKeyboard();
+
+
+        /*
+         * 清除輸入
          */
 
         messageInput.value =
@@ -747,7 +840,7 @@ leaveChat.addEventListener(
 
 
         /*
-         * 回到首頁
+         * 回首頁
          */
 
         chatPage.style.display =
@@ -759,816 +852,27 @@ leaveChat.addEventListener(
 
 
         /*
-         * 清除手機高度設定
+         * 回到首頁頂部
          */
 
-        chatPage.style.height =
-            "";
-
-    }
-);
- socket = io();
-
-const home = document.getElementById("home");
-const chatPage = document.getElementById("chatPage");
-
-const startChat = document.getElementById("startChat");
-const leaveChat = document.getElementById("leaveChat");
-
-const messageInput = document.getElementById("messageInput");
-const sendMessage = document.getElementById("sendMessage");
-const messages = document.getElementById("messages");
-
-
-// =========================
-// 目前聊天對象的匿名名稱
-// =========================
-
-let strangerName = "陌生人";
-
-
-// =========================
-// Socket 連線狀態
-// =========================
-
-let socketConnected = false;
-
-socket.on("connect", () => {
-
-    socketConnected = true;
-
-    console.log("Socket 已連線");
-
-});
-
-
-socket.on("disconnect", () => {
-
-    socketConnected = false;
-
-    console.log("Socket 已斷線");
-
-});
-
-
-// =========================
-// 開始找陌生人
-// =========================
-
-startChat.addEventListener("click", () => {
-
-    home.style.display = "none";
-
-    chatPage.style.display = "flex";
-
-    // 新的配對先重設
-    strangerName = "陌生人";
-
-
-    messages.innerHTML = `
-        <div class="message other">
-
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-                🌙 正在尋找一位陌生人……
-            </div>
-
-        </div>
-    `;
-
-
-    // 確認 Socket 已經連線
-    if (socket.connected) {
-
-        socket.emit("findStranger");
-
-    } else {
-
-        messages.innerHTML = `
-            <div class="message other">
-
-                <span class="name">
-                    寂寞星球
-                </span>
-
-                <div class="bubble">
-                    🔌 正在連線，請稍候……
-                </div>
-
-            </div>
-        `;
-
-        // Socket 重新連線後再尋找
-        socket.once("connect", () => {
-
-            messages.innerHTML = `
-                <div class="message other">
-
-                    <span class="name">
-                        寂寞星球
-                    </span>
-
-                    <div class="bubble">
-                        🌙 正在尋找一位陌生人……
-                    </div>
-
-                </div>
-            `;
-
-            socket.emit("findStranger");
-
-        });
-
-    }
-
-});
-
-
-// =========================
-// 等待配對
-// =========================
-
-socket.on("waiting", () => {
-
-    console.log("正在等待陌生人...");
-
-});
-
-
-// =========================
-// 配對成功
-// =========================
-
-socket.on("matched", (anonymousName) => {
-
-    // 記住這次配對的陌生人名字
-    strangerName = anonymousName;
-
-
-    messages.innerHTML = `
-        <div class="message other">
-
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-
-                ✨ 配對成功！<br><br>
-
-                你遇見了：
-
-                <strong>
-                    ${anonymousName}
-                </strong>
-
-                <br><br>
-
-                現在可以開始聊天了 🌙
-
-            </div>
-
-        </div>
-    `;
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-
-    /*
-     * 不在這裡直接 focus。
-     *
-     * 手機瀏覽器特別是 iPhone，
-     * 自動 focus 可能會直接叫出鍵盤，
-     * 並造成第一次點擊輸入框或送出按鈕時行為異常。
-     *
-     * 所以讓使用者自己點擊輸入框。
-     */
-
-});
-
-
-// =========================
-// 發送訊息
-// =========================
-
-function send() {
-
-    // 取得文字
-    const text =
-        messageInput.value.trim();
-
-
-    // 空白訊息不送出
-    if (text === "") {
-
-        return;
-
-    }
-
-
-    // Socket 尚未連線
-    if (!socket.connected) {
-
-        console.log("Socket 尚未連線");
-
-        return;
-
-    }
-
-
-    // =========================
-    // 顯示自己的訊息
-    // =========================
-
-    const message =
-        document.createElement("div");
-
-    message.className =
-        "message me";
-
-
-    message.innerHTML = `
-        <span class="name">
-            你
-        </span>
-
-        <div class="bubble"></div>
-    `;
-
-
-    message.querySelector(".bubble").textContent =
-        text;
-
-
-    messages.appendChild(message);
-
-
-    // =========================
-    // 傳送給陌生人
-    // =========================
-
-    socket.emit(
-        "sendMessage",
-        text
-    );
-
-
-    // =========================
-    // 清空輸入框
-    // =========================
-
-    messageInput.value = "";
-
-
-    // =========================
-    // 捲到最新訊息
-    // =========================
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-
-    /*
-     * 延遲 focus。
-     *
-     * 避免手機瀏覽器在 click / keydown
-     * 事件期間發生奇怪的鍵盤行為。
-     */
-
-    setTimeout(() => {
-
-        messageInput.focus();
-
-    }, 50);
-
-}
-
-
-// =========================
-// 收到陌生人的訊息
-// =========================
-
-socket.on("receiveMessage", (text) => {
-
-    const message =
-        document.createElement("div");
-
-
-    message.className =
-        "message other";
-
-
-    message.innerHTML = `
-        <span class="name"></span>
-
-        <div class="bubble"></div>
-    `;
-
-
-    // 使用目前配對的匿名名稱
-    message.querySelector(".name").textContent =
-        strangerName;
-
-
-    message.querySelector(".bubble").textContent =
-        text;
-
-
-    messages.appendChild(message);
-
-
-    // 捲到最新訊息
-    messages.scrollTop =
-        messages.scrollHeight;
-
-});
-
-
-// =========================
-// 陌生人離開
-// =========================
-
-socket.on("strangerLeft", () => {
-
-    const message =
-        document.createElement("div");
-
-
-    message.className =
-        "message other";
-
-
-    message.innerHTML = `
-        <span class="name">
-            寂寞星球
-        </span>
-
-        <div class="bubble">
-
-            🌙 ${strangerName} 已離開聊天室。<br><br>
-
-            也許下一次，
-            會遇見另一個想說說話的人。
-
-        </div>
-    `;
-
-
-    messages.appendChild(message);
-
-
-    // =========================
-    // 再找一個人的按鈕
-    // =========================
-
-    const button =
-        document.createElement("button");
-
-
-    button.id =
-        "findAgain";
-
-
-    button.textContent =
-        "🌙 再找一個人";
-
-
-    messages.appendChild(button);
-
-
-    messages.scrollTop =
-        messages.scrollHeight;
-
-
-    // =========================
-    // 再找一個人
-    // =========================
-
-    button.addEventListener("click", () => {
-
-        button.remove();
-
-
-        // 清除上一個聊天室
-        messages.innerHTML = "";
-
-
-        // 重設陌生人名稱
-        strangerName =
-            "陌生人";
-
-
-        // 清空輸入框
-        messageInput.value = "";
-
-
-        const waitingMessage =
-            document.createElement("div");
-
-
-        waitingMessage.className =
-            "message other";
-
-
-        waitingMessage.innerHTML = `
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-                🌙 正在尋找一位陌生人……
-            </div>
-        `;
-
-
-        messages.appendChild(waitingMessage);
-
-
-        messages.scrollTop =
-            messages.scrollHeight;
-
-
-        // 開始新的配對
-        if (socket.connected) {
-
-            socket.emit(
-                "findStranger"
-            );
-
-        }
-
-    });
-
-});
-
-
-// =========================
-// 點擊送出
-// =========================
-
-sendMessage.addEventListener(
-    "click",
-    (event) => {
-
-        /*
-         * 防止按鈕的預設行為
-         * 造成手機瀏覽器第一次點擊異常。
-         */
-
-        event.preventDefault();
-
-        send();
-
-    }
-);
-
-
-// =========================
-// Enter 送出
-// =========================
-
-messageInput.addEventListener(
-    "keydown",
-    (event) => {
-
-        if (event.key === "Enter") {
-
-            event.preventDefault();
-
-            send();
-
-        }
-
-    }
-);
-
-
-// =========================
-// 離開聊天室
-// =========================
-
-leaveChat.addEventListener(
-    "click",
-    () => {
-
-        socket.emit(
-            "leaveChat"
+        window.scrollTo(
+            0,
+            0
         );
 
-
-        chatPage.style.display =
-            "none";
-
-
-        home.style.display =
-            "flex";
+    }
+);
 
 
-        // 清空輸入框
-        messageInput.value = "";
+/* =========================================================
+   📱 頁面恢復時
+========================================================= */
+
+window.addEventListener(
+    "pageshow",
+    () => {
+
+        sending = false;
 
     }
-); socket = io();
-
-const home = document.getElementById("home");
-const chatPage = document.getElementById("chatPage");
-
-const startChat = document.getElementById("startChat");
-const leaveChat = document.getElementById("leaveChat");
-
-const messageInput = document.getElementById("messageInput");
-const sendMessage = document.getElementById("sendMessage");
-const messages = document.getElementById("messages");
-
-
-// =========================
-// 目前聊天對象的匿名名稱
-// =========================
-
-let strangerName = "陌生人";
-
-
-// =========================
-// 開始找陌生人
-// =========================
-
-startChat.addEventListener("click", () => {
-
-    home.style.display = "none";
-    chatPage.style.display = "flex";
-
-    // 新的配對先重設
-    strangerName = "陌生人";
-
-    messages.innerHTML = `
-        <div class="message other">
-
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-                🌙 正在尋找一位陌生人……
-            </div>
-
-        </div>
-    `;
-
-    socket.emit("findStranger");
-
-});
-
-
-// =========================
-// 等待配對
-// =========================
-
-socket.on("waiting", () => {
-
-    console.log("正在等待陌生人...");
-
-});
-
-
-// =========================
-// 配對成功
-// =========================
-
-socket.on("matched", (anonymousName) => {
-
-    // 記住這次配對的陌生人名字
-    strangerName = anonymousName;
-
-    messages.innerHTML = `
-        <div class="message other">
-
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-
-                ✨ 配對成功！<br><br>
-
-                你遇見了：
-
-                <strong>
-                    ${anonymousName}
-                </strong>
-
-                <br><br>
-
-                現在可以開始聊天了 🌙
-
-            </div>
-
-        </div>
-    `;
-
-    messageInput.focus();
-
-});
-
-
-// =========================
-// 發送訊息
-// =========================
-
-function send() {
-
-    const text = messageInput.value.trim();
-
-    if (text === "") {
-        return;
-    }
-
-
-    // 顯示自己的訊息
-
-    const message = document.createElement("div");
-
-    message.className = "message me";
-
-    message.innerHTML = `
-        <span class="name">
-            你
-        </span>
-
-        <div class="bubble"></div>
-    `;
-
-    message.querySelector(".bubble").textContent = text;
-
-    messages.appendChild(message);
-
-
-    // 傳送給陌生人
-
-    socket.emit("sendMessage", text);
-
-
-    messageInput.value = "";
-
-    messages.scrollTop = messages.scrollHeight;
-
-    messageInput.focus();
-
-}
-
-
-// =========================
-// 收到陌生人的訊息
-// =========================
-
-socket.on("receiveMessage", (text) => {
-
-    const message = document.createElement("div");
-
-    message.className = "message other";
-
-    message.innerHTML = `
-        <span class="name"></span>
-
-        <div class="bubble"></div>
-    `;
-
-
-    // 使用目前配對的匿名名稱
-    message.querySelector(".name").textContent =
-        strangerName;
-
-
-    message.querySelector(".bubble").textContent =
-        text;
-
-
-    messages.appendChild(message);
-
-    messages.scrollTop = messages.scrollHeight;
-
-});
-
-
-// =========================
-// 陌生人離開
-// =========================
-
-socket.on("strangerLeft", () => {
-
-    const message = document.createElement("div");
-
-    message.className = "message other";
-
-    message.innerHTML = `
-        <span class="name">
-            寂寞星球
-        </span>
-
-        <div class="bubble">
-
-            🌙 ${strangerName} 已離開聊天室。<br><br>
-
-            也許下一次，
-            會遇見另一個想說說話的人。
-
-        </div>
-    `;
-
-    messages.appendChild(message);
-
-
-    // 再找一個人
-
-    const button = document.createElement("button");
-
-    button.id = "findAgain";
-
-    button.textContent = "🌙 再找一個人";
-
-    messages.appendChild(button);
-
-    messages.scrollTop = messages.scrollHeight;
-
-
-    // =========================
-    // 再找一個人
-    // =========================
-
-    button.addEventListener("click", () => {
-
-        button.remove();
-
-        // 清除上一個聊天室
-        messages.innerHTML = "";
-
-        // 重設陌生人名稱
-        strangerName = "陌生人";
-
-
-        const waitingMessage =
-            document.createElement("div");
-
-        waitingMessage.className =
-            "message other";
-
-        waitingMessage.innerHTML = `
-            <span class="name">
-                寂寞星球
-            </span>
-
-            <div class="bubble">
-                🌙 正在尋找一位陌生人……
-            </div>
-        `;
-
-        messages.appendChild(waitingMessage);
-
-        messages.scrollTop =
-            messages.scrollHeight;
-
-
-        // 開始新的配對
-        socket.emit("findStranger");
-
-    });
-
-});
-
-
-// =========================
-// 點擊送出
-// =========================
-
-sendMessage.addEventListener("click", send);
-
-
-// =========================
-// Enter 送出
-// =========================
-
-messageInput.addEventListener("keydown", (event) => {
-
-    if (event.key === "Enter") {
-        send();
-    }
-
-});
-
-
-// =========================
-// 離開聊天室
-// =========================
-
-leaveChat.addEventListener("click", () => {
-
-    socket.emit("leaveChat");
-
-    chatPage.style.display = "none";
-    home.style.display = "flex";
-
-});
+);
